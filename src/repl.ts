@@ -1,8 +1,9 @@
 import { createInterface } from "readline";
+import {commandExit} from "./command_exit.js";
 
 export function cleanInput(input: string): string[] {
 	return input.trim().toLowerCase().split(/\s+/);
-}
+};
 
 
 export function startREPL() {
@@ -20,7 +21,34 @@ export function startREPL() {
 			rl.prompt();
 			return;
 		}
-		console.log(`Your command was: ${words[0]}`);
+		const command = words[0];
+		console.log(`Your command was: ${command}`);
+		/*const commands = getCommands();
+		try {
+			commands[command].callback(commands);
+		} catch (err) {
+			console.log("Unknown command");
+		}
+		*/
 		rl.prompt();
 	})
-}
+};
+
+
+
+export type CLICommand = {
+	name: string,
+	description: string;
+	callback: (commands: Record<string, CLICommand>) => void;
+};
+
+export function getCommands(): Record<string, CLICommand> {
+	return {
+		exit: {
+			name: "exit",
+			description: "Exits the pokedex",
+			callback: commandExit
+		}
+	}
+};
+
