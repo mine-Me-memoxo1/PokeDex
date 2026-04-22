@@ -27,10 +27,16 @@ export function startREPL() {
 		//console.log(`Your command was: ${command}`);
 
 		const commands = getCommands();
-		try {
-			commands[command].callback(commands);
-		} catch (err) {
+		const comObj = commands[command];
+		if (!comObj) {
 			console.log("Unknown command");
+			rl.prompt();
+			return;
+		}
+		try {
+			comObj.callback(commands);
+		} catch (err) {
+			console.log(err);
 		}
 		rl.prompt();
 	})
