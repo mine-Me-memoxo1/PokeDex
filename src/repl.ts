@@ -1,19 +1,16 @@
-import { createInterface } from "readline";
+
 import {commandExit} from "./command_exit.js";
 import {commandHelp} from "./command_help.js";
 import type { CLICommand} from "./command.ts";
+import type { State } from "./state.ts"
 
 export function cleanInput(input: string): string[] {
 	return input.trim().toLowerCase().split(/\s+/);
 };
 
 
-export function startREPL() {
-	const rl = createInterface({
-		input: process.stdin,
-		output: process.stdout,
-		prompt: `PokeDex > `
-	});
+export function startREPL(state: State) {
+	const rl = state.rl;
 
 	rl.prompt();
 	
@@ -26,7 +23,7 @@ export function startREPL() {
 		const command = words[0];
 		//console.log(`Your command was: ${command}`);
 
-		const commands = getCommands();
+		const commands = state.commands;
 		const comObj = commands[command];
 		if (!comObj) {
 			console.log("Unknown command");
@@ -34,7 +31,7 @@ export function startREPL() {
 			return;
 		}
 		try {
-			comObj.callback(commands);
+			comObj.callback(state);
 		} catch (err) {
 			console.log(err);
 		}
@@ -44,19 +41,5 @@ export function startREPL() {
 
 
 
-export function getCommands(): Record<string, CLICommand> {
-	return {
-		help: {
-			name: "help",
-			description: "Displays a help message",
-			callback: commandHelp
-		},
-		exit: {
-			name: "exit",
-			description: "Exits the pokedex",
-			callback: commandExit
-		},
-		
-	}
-};
+
 
