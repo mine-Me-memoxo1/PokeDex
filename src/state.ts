@@ -53,7 +53,7 @@ export async function initState(): Promise<State> {
 	}
 
 	const pokeapi = new PokeAPI();
-	const shallowLocations = await pokeapi.fetchLocations();
+	//const shallowLocations = await pokeapi.fetchLocations();
 
 	return {
 		rl,

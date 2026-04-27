@@ -38,6 +38,8 @@ export async function startREPL(state: State) {
 		} catch (err) {
 			console.log(err);
 		}
+		console.log(state.nextLocationsURL);
+		console.log(state.prevLocationsURL);
 		rl.prompt();
 	})
 };

@@ -4,31 +4,50 @@ export class PokeAPI {
   constructor() {}
 
   async fetchLocations(pageURL?: string|null): Promise<ShallowLocations> {
-    const resp = await fetch(pageURL??`${PokeAPI.baseURL}/location-area`, {
+    try {
+    	const resp = await fetch(pageURL??`${PokeAPI.baseURL}/location-area`, {
 				   method: "GET",
 				   mode: "cors",
 				   headers: {
 					   "Content-Type": "application/json",
 				   }
-    })
-    return await resp.json() as ShallowLocations;
-  }
+    				});
+	if (!resp.ok) {
+		throw new Error(`${resp.status} ${resp.statusText}`);
+
+    	}
+	return await resp.json() as ShallowLocations;
+    	
+  } catch (e) {
+	  if (e instanceof Error) {
+		  console.log(`${e.message}`);
+	  } else {
+		console.log("An unknown error occured");   
+	  }
+	  throw e; // Ensures we don't return undefined which eliminates error produced during compile time 
+     	}
+      }
 
   async fetchLocation(locationName: string): Promise<Location> {
-    const resp = await fetch(`${PokeAPI.baseURL}/location-area/${locationName}`, {
-	    method: "GET",
+   	try {
+    	   const resp = await fetch(`${PokeAPI.baseURL}/location-area/${locationName}`, {
+	    	method: "GET",
 	    mode: "cors",
-  })
-  return await resp.json() as Location;
-}
-}
-
-
+ 	 });
+	 if (!resp.ok) {
+		 throw new Error(`${resp.status} ${resp.statusText}`)
+	 }
+  	return await resp.json() as Location;
+   } catch (e) {
+	throw new Error(`Error fetching location '${locationName}': ${(e as Error).message}`);  
+   }
+  }
+};
 
 export type ShallowLocations = {
   count: number,
   next: string,
-  prev: string | null,
+  previous: string | null,
   results: Location [],
 };
 
