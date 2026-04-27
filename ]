@@ -1,0 +1,13 @@
+import {PokeAPI} from "./pokeapi.js";
+import type {ShallowLocations} from "./pokeapi.js";
+import type {State} from "./state.js";
+
+export async function commandMap(state: State): Promise<void> {
+	const nextLocations = state.pokeAPI.fetchLocations("https://pokeapi.co/api/v2/location-area") ;
+	console.log(nextLocations);
+	state.nextLocationsURL = nextLocations.next;
+	state.prevLocationsURL = nextLocations.prev;
+	for (let loc of nextLocations.results) {
+		console.log(loc.name);
+	}
+}

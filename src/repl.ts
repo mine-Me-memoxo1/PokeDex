@@ -1,20 +1,23 @@
 
 import {commandExit} from "./command_exit.js";
 import {commandHelp} from "./command_help.js";
-import type { CLICommand} from "./command.ts";
-import type { State } from "./state.ts"
+import type { CLICommand} from "./command.js";
+import type { State } from "./state.js";
+import { commandMap } from "./command_map.js";
+import { commandMapb } from "./command_mapb.js";
+
 
 export function cleanInput(input: string): string[] {
 	return input.trim().toLowerCase().split(/\s+/);
 };
 
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
 	const rl = state.rl;
 
 	rl.prompt();
 	
-	rl.on("line", (line) => {
+	rl.on("line", async (line) => {
 		let words = cleanInput(line)
 		if (words.length === 0) {
 			rl.prompt();
@@ -31,7 +34,7 @@ export function startREPL(state: State) {
 			return;
 		}
 		try {
-			comObj.callback(state);
+			const resp = await comObj.callback(state);
 		} catch (err) {
 			console.log(err);
 		}
