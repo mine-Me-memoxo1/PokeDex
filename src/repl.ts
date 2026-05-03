@@ -24,6 +24,7 @@ export async function startREPL(state: State) {
 			return;
 		}
 		const command = words[0];
+		
 		//console.log(`Your command was: ${command}`);
 
 		const commands = state.commands;
@@ -34,12 +35,11 @@ export async function startREPL(state: State) {
 			return;
 		}
 		try {
-			const resp = await comObj.callback(state);
+			const resp = await comObj.callback(state, ...words.slice(1));
 		} catch (err) {
-			console.log(err);
+			console.log((err as Error).message);
 		}
-		console.log(state.nextLocationsURL);
-		console.log(state.prevLocationsURL);
+
 		rl.prompt();
 	})
 };
