@@ -8,6 +8,7 @@ import {PokeAPI} from "./pokeapi.js";
 import type {Pokemon} from "./pokeapi.js";
 import {commandCatch} from "./command_catch.js";
 import {commandInspect} from "./command_inspect.js";
+import {commandPokeDex} from "./command_pokedex.js";
 
 export type State = {
 	rl: Interface,
@@ -69,6 +70,11 @@ export async function initState(): Promise<State> {
 			name: "inspect",
 			description: "Shows description of pokemon if in PokeDex",
 			callback: commandInspect,
+		},
+		pokedex: {
+			name: "pokedex",
+			description: "Displays names of pokemon in pokedex",
+			callback: commandPokeDex,
 		}
 	}
 
