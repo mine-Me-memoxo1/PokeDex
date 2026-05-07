@@ -4,7 +4,10 @@ import {commandExit} from "./command_exit.js";
 import { commandMap } from "./command_map.js";
 import { commandMapb } from "./command_mapb.js";
 import {commandExplore} from "./command_explore.js";
-import {PokeAPI} from "./pokeapi.js"
+import {PokeAPI} from "./pokeapi.js";
+import type {Pokemon} from "./pokeapi.js";
+import {commandCatch} from "./command_catch.js";
+import {commandInspect} from "./command_inspect.js";
 
 export type State = {
 	rl: Interface,
@@ -12,6 +15,7 @@ export type State = {
 	pokeAPI: PokeAPI,
 	nextLocationsURL: string|null,
 	prevLocationsURL: string|null,
+	PokeDex: Map<string, Object>,
 }
 
 
@@ -56,6 +60,16 @@ export async function initState(): Promise<State> {
 			description: "Displays all pokemon found at a location",
 			callback: commandExplore
 		},
+		catch: {
+			name: "catch",
+			description: "Attempts to catch pokmon",
+			callback: commandCatch,
+		},
+		inspect: {
+			name: "inspect",
+			description: "Shows description of pokemon if in PokeDex",
+			callback: commandInspect,
+		}
 	}
 
 	const pokeapi = new PokeAPI();
@@ -67,5 +81,6 @@ export async function initState(): Promise<State> {
 		pokeAPI: pokeapi,
 		nextLocationsURL: null,
 		prevLocationsURL: null,
+		PokeDex: new Map<string, Object>(),
 	}
 }
